@@ -6,6 +6,9 @@
     <groupId>spark-stremaing-mllib</groupId>
     <artifactId>spark-stremaing-mllib</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <properties>
+        <spark.version>1.3.1</spark.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -15,22 +18,22 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_2.10</artifactId>
-            <version>1.3.1</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_2.10</artifactId>
-            <version>1.3.1</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_2.10</artifactId>
-            <version>1.3.1</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-mllib_2.10</artifactId>
-            <version>1.3.1</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -45,7 +48,7 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming-twitter_2.10</artifactId>
-            <version>1.3.1</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.twitter4j</groupId>

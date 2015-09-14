@@ -1,7 +1,7 @@
 package com.springone.spark;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springone.spark.utils.Tweet;
+import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.streaming.Durations;
 import org.apache.spark.streaming.api.java.JavaDStream;
@@ -14,6 +14,7 @@ import twitter4j.conf.ConfigurationBuilder;
  * Connection with the Twitter API and Spark streaming to retrieve stream of tweets.
  */
 public class TweetStream {
+  final static Logger log = Logger.getLogger(TweetStream.class);
 
   static JavaStreamingContext jssc;
 
@@ -53,7 +54,7 @@ public class TweetStream {
     // It represents the connexion to Spark and it is the place where you can configure the common properties
     // like the app name, the master url, memories allocation...
     SparkConf conf = new SparkConf()
-        .setAppName("Play with Spark Streaming")
+        .setAppName("Playing with Spark Streaming")
         .setMaster("local[*]");  // here local mode. And * means you will use as much as you have cores.
 
     // create a java streaming context and define the window (2 seconds batch)
@@ -63,17 +64,22 @@ public class TweetStream {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    JavaDStream<String> tweets = TwitterUtils.createStream(jssc, getAuth())
+    /*JavaDStream<String> tweets = TwitterUtils.createStream(jssc, getAuth())
         .map(tweetStatus ->
             new Tweet(tweetStatus.getLang(),
                 tweetStatus.getUser().getId(),
                 tweetStatus.getUser().getName(),
                 tweetStatus.getText()))
-        .map(tweet -> mapper.writeValueAsString(tweet));
+        .map(tweet -> mapper.writeValueAsString(tweet));*/
+
+    String[] filters = {"spring", "springone", "java", "spark" , "#DC", "washington" , "#paris", "donald trump"};
+
+    JavaDStream<String> tweets = TwitterUtils.createStream(jssc, getAuth(), filters)
+                                             .map(tweetStatus -> mapper.writeValueAsString(tweetStatus));
 
     tweets.print();
 
-    tweets.dstream().saveAsTextFiles(PATH, "stream");
+    tweets.repartition(1).dstream().saveAsTextFiles(PATH, "stream");
 
     // Start the context
     jssc.start();
