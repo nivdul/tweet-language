@@ -2,6 +2,7 @@ package com.springone.spark;
 
 
 import com.springone.spark.utils.NGram;
+import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
@@ -21,6 +22,8 @@ import java.util.List;
  * Use the Kmeans method to define cluster per language.
  */
 public class KmeanModel {
+
+  final static Logger log = Logger.getLogger(KmeanModel.class);
 
   private static String pathToFile = "file:///Users/ludwineprobst/DataSets/twitter/*";
 
@@ -94,6 +97,6 @@ public class KmeanModel {
       int cluster = model.predict(v);
       System.out.println(test + " is in the cluster " + cluster);
     }
-
   }
+
 }
