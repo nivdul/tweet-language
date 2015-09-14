@@ -13,8 +13,8 @@ import twitter4j.conf.ConfigurationBuilder;
 /**
  * Connection with the Twitter API and Spark streaming to retrieve stream of tweets.
  */
-public class TweetStream {
-  final static Logger log = Logger.getLogger(TweetStream.class);
+public class PlayWithSparkStreaming {
+  final static Logger log = Logger.getLogger(PlayWithSparkStreaming.class);
 
   static JavaStreamingContext jssc;
 
