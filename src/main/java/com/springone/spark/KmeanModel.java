@@ -2,6 +2,7 @@ package com.springone.spark;
 
 
 import com.springone.spark.utils.NGram;
+import com.springone.spark.utils.TwitterConnection;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -14,6 +15,10 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.rdd.RDD;
 import org.apache.spark.sql.DataFrame;
 import org.apache.spark.sql.SQLContext;
+import org.apache.spark.streaming.Durations;
+import org.apache.spark.streaming.api.java.JavaDStream;
+import org.apache.spark.streaming.api.java.JavaStreamingContext;
+import org.apache.spark.streaming.twitter.TwitterUtils;
 import scala.Tuple2;
 
 import java.util.List;
@@ -33,6 +38,7 @@ public class KmeanModel {
         .setMaster("local[*]"); // here local mode. And * means you will use as much as you have cores.
 
     JavaSparkContext sc = new JavaSparkContext(conf);
+    JavaStreamingContext jssc = new JavaStreamingContext(sc, Durations.seconds(2));
     SQLContext sqlContext = new SQLContext(sc);
 
     // need to build the data :D :D
@@ -86,6 +92,8 @@ public class KmeanModel {
     int iter = 20;
 
     KMeansModel model = KMeans.train(vectors, clusterNumber, iter);
+    // TODO error compile
+    sc.sc().makeRDD(model.clusterCenters(), model.k(), null).saveAsObjectFile("/Users/ludwineprobst/springone/model");
 
     // Evaluate clustering by computing Within Set Sum of Squared Errors
     double wssse = model.computeCost(vectors);
@@ -97,6 +105,10 @@ public class KmeanModel {
       int cluster = model.predict(v);
       System.out.println(test + " is in the cluster " + cluster);
     }
+
+    JavaDStream<String> jds = TwitterUtils.createStream(jssc, TwitterConnection.getAuth())
+                                          .map(tweet -> tweet.getText());
+
   }
 
 }
