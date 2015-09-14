@@ -72,6 +72,11 @@ public class PlayWithSparkDataFrame {
     System.out.println("number of languages: " + result.collectAsList().size());
     System.out.println(result.collectAsList());
 
+    //df.registerTempTable("tweets");
+    DataFrame reducedTweet = sqlContext.sql("SELECT lang, name, text FROM tweets");
+
+    System.out.println("reduced Tweet: ");
+    reducedTweet.show();
   }
 
 }
