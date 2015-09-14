@@ -58,6 +58,9 @@ public class PlayWithSparkDataFrame {
     // id         lang        name                 text
     // 2907381456 fr          sophie               springOne ça commence !
 
+    // select the language
+    df.select("lang").show();
+
     // Count the tweets for each language
     df.groupBy("lang").count().show();
 
