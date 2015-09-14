@@ -40,10 +40,9 @@ public class PlayWithSparkDataFrame {
 
     // load the data (json file here) and register the data in the "tweets" table.
     DataFrame df = sqlContext.jsonFile(pathToFile);
-    df.registerTempTable("tweets");
 
     // Displays the content of the DataFrame to stdout
-    //tweets.show();
+    //df.show();
 
     // we see something like that:
     // id         lang        name                 text
@@ -60,14 +59,16 @@ public class PlayWithSparkDataFrame {
     // 2907381456 fr          sophie               springOne ça commence !
 
     // Count the tweets for each language
+    df.groupBy("lang").count().show();
+
+    // another way using SQL queries
     // It will be use to determine the number of clusters we want for the K-means algorithm.
+    df.registerTempTable("tweets");
     DataFrame result = sqlContext.sql("SELECT lang, COUNT(*) as cnt FROM tweets GROUP BY lang ORDER BY cnt DESC");
 
     System.out.println("number of languages: " + result.collectAsList().size());
     System.out.println(result.collectAsList());
 
-    // another way
-    df.groupBy("lang").count().show();
   }
 
 }
