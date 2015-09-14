@@ -53,7 +53,7 @@ public class PlayWithSparkDataFrame {
     DataFrame filtered = df.filter((df.col("lang").equalTo("en"))
                                         .or(df.col("lang").equalTo("fr")))
                            .toDF();
-    
+
     filtered.show();
     // you should see something like that:
     // id         lang        name                 text
