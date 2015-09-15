@@ -3,7 +3,6 @@ package com.springone.spark;
 
 import com.springone.spark.utils.NGram;
 import com.springone.spark.utils.TwitterConnection;
-import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -22,7 +21,6 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import scala.Tuple2;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
