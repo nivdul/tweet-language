@@ -77,12 +77,13 @@ public class KmeanModel {
 
     List<String> tests = points.take(100);
 
-    // slip into 2-gram
+    // Create feature vectors by turning each tweet into bigrams of characters
     JavaRDD<Iterable<String>> lists = points.map(ele -> NGram.ngrams(2, ele));
 
     System.out.println("With ngram: " + lists.first());
 
     // https://en.wikipedia.org/wiki/Feature_hashing
+    // then hashing each element to a length-1000 feature vector that we can pass to MLlib
     HashingTF hash = new HashingTF(1000);
     RDD<Vector> vectors = lists.map(line -> hash.transform(line)).rdd().cache();
 
