@@ -3,6 +3,7 @@ package com.springone.spark;
 
 import com.springone.spark.utils.NGram;
 import com.springone.spark.utils.TwitterConnection;
+import org.apache.commons.math.stat.regression.SimpleRegression;
 import org.apache.log4j.Logger;
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -21,6 +22,7 @@ import org.apache.spark.streaming.api.java.JavaStreamingContext;
 import org.apache.spark.streaming.twitter.TwitterUtils;
 import scala.Tuple2;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -92,8 +94,6 @@ public class KmeanModel {
     int iter = 20;
 
     KMeansModel model = KMeans.train(vectors, clusterNumber, iter);
-    // TODO error compile
-    sc.sc().makeRDD(model.clusterCenters(), model.k(), null).saveAsObjectFile("/Users/ludwineprobst/springone/model");
 
     // Evaluate clustering by computing Within Set Sum of Squared Errors
     double wssse = model.computeCost(vectors);
@@ -106,9 +106,18 @@ public class KmeanModel {
       System.out.println(test + " is in the cluster " + cluster);
     }
 
-    JavaDStream<String> jds = TwitterUtils.createStream(jssc, TwitterConnection.getAuth())
-                                          .map(tweet -> tweet.getText());
+    JavaDStream<String> contents = TwitterUtils.createStream(jssc, TwitterConnection.getAuth())
+                                               .map(tweet -> tweet.getText());
 
+
+    /*sc.parallelize(Arrays.asList(model.clusterCenters())).saveAsObjectFile("/Users/ludwineprobst/springone/model");
+
+    JavaRDD<Object> modelSaved = sc.objectFile("/Users/ludwineprobst/springone/model");
+    KMeansModel reg = new KMeansModel(modelSaved.rdd().collect());
+
+    JavaDStream<String> results = contents.filter(content -> reg.predict(hash.transform(NGram.ngrams(2, content))) == clusterNumber);
+
+    results.print();*/
   }
 
 }

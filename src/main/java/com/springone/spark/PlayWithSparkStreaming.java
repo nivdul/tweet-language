@@ -36,9 +36,9 @@ public class PlayWithSparkStreaming {
 
     ObjectMapper mapper = new ObjectMapper();
 
-    String[] filters = {"spring", "springone", "java", "spark" , "#DC", "washington" , "#paris"};
+    //String[] filters = {"spring", "#s2gx", "java", "spark" , "#DC", "washington"};
 
-    JavaDStream<String> tweets = TwitterUtils.createStream(jssc, TwitterConnection.getAuth(), filters)
+    JavaDStream<String> tweets = TwitterUtils.createStream(jssc, TwitterConnection.getAuth())
                                              .map(tweetStatus -> mapper.writeValueAsString(tweetStatus));
 
     tweets.print(5);
